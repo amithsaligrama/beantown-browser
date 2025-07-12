@@ -28,6 +28,9 @@ const Game = () => {
   const [revealAnswer, setRevealAnswer] = useState(false);
   const [shareCopied, setShareCopied] = useState(false);
 
+  const dayIndex = Math.floor((Date.now() - LAUNCH_DATE.getTime())/86400000);
+  const storageKey = `btb-state-${dayIndex}`;
+
   useEffect(()=>{document.title = 'Beantown Browser';},[]);
 
   const ClickHandler = () => {
@@ -61,6 +64,29 @@ const Game = () => {
       console.error('Error fetching location:', error);
     }
   };
+
+  /* ----- persistence effects ----- */
+  // restore saved state for today
+  useEffect(()=>{
+    const raw = localStorage.getItem(storageKey);
+    if(raw){
+      try{
+        const saved = JSON.parse(raw);
+        if(saved){
+          setGuesses(saved.guesses||[]);
+          setDistance(saved.distance||null);
+          setFeedback(saved.feedback||'');
+          setRevealAnswer(saved.revealAnswer||false);
+        }
+      }catch(e){console.error('Failed to parse saved state',e);}
+    }
+  },[storageKey]);
+
+  // save whenever relevant state changes
+  useEffect(()=>{
+    const payload = {guesses,distance,feedback,revealAnswer};
+    localStorage.setItem(storageKey, JSON.stringify(payload));
+  },[guesses,distance,feedback,revealAnswer,storageKey]);
 
   /* ----- effects ----- */
   useEffect(()=>{
