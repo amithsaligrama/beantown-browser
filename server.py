@@ -6,6 +6,7 @@ import random
 import json
 from pathlib import Path
 import datetime
+import hashlib
 import requests
 from math import radians, cos, sin, asin, sqrt
 
@@ -71,6 +72,8 @@ def get_location():
         except Exception:
             pass  # fall through to regenerate
 
+    # deterministic seed per day to avoid repeat due to server running long
+    random.seed(int(hashlib.sha256(today.encode()).hexdigest(),16) & 0xffffffff)
     lat, lng = random_boston_coordinate()
     image_url = get_street_view_image_url(lat, lng, width=640, height=400)
     payload = {

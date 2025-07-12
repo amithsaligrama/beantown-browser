@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
+
 import { MapContainer, TileLayer, Marker, Popup, Polyline, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-
 
 // Remove the default icon warning
 delete L.Icon.Default.prototype._getIconUrl;
@@ -11,6 +11,8 @@ L.Icon.Default.mergeOptions({
   iconUrl: require('leaflet/dist/images/marker-icon.png'),
   shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 });
+
+const LAUNCH_DATE = new Date('2025-07-11T00:00:00Z');
 
 const Game = () => {
   const [currentLocation, setCurrentLocation] = useState(null);
@@ -25,6 +27,8 @@ const Game = () => {
   const [countdown, setCountdown] = useState('');
   const [revealAnswer, setRevealAnswer] = useState(false);
   const [shareCopied, setShareCopied] = useState(false);
+
+  useEffect(()=>{document.title = 'Beantown Browser';},[]);
 
   const ClickHandler = () => {
     useMapEvents({
@@ -89,7 +93,7 @@ const Game = () => {
   };
 
   const handleShare = () => {
-    const todayIndex = Math.floor(Date.now()/86400000);
+    const todayIndex = Math.floor((Date.now() - LAUNCH_DATE.getTime())/86400000);
     let text = `Beantown Browser #${todayIndex}\nWhere do you think this picture was taken?\n`;
     guesses.forEach((g,idx)=>{
       const color = getColor(g.distance);
@@ -98,6 +102,9 @@ const Game = () => {
       const arrow = revealAnswer && idx===guesses.length-1 && distance<=WIN_THRESHOLD_KM? '' : (arrowFromDir[dir]||'');
       text += `${sym}${arrow}\n`;
     });
+    if(distance!==null){
+      text += `\nI was ${formatDistance(distance)} away.`;
+    }
     text += '\nhttps://beantownbrowser.com';
     navigator.clipboard.writeText(text).then(()=> setShareCopied(true));
   };
