@@ -4,6 +4,8 @@ import { MapContainer, TileLayer, Marker, Popup, Polyline, useMapEvents } from '
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
+/* eslint-disable react-hooks/exhaustive-deps */
+
 // Remove the default icon warning
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
