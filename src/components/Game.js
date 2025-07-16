@@ -12,7 +12,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 });
 
-const LAUNCH_DATE = new Date('2025-07-11T00:00:00Z');
+const LAUNCH_DATE = new Date('2025-07-16T00:00:00Z');
 
 const Game = () => {
   const [currentLocation, setCurrentLocation] = useState(null);
@@ -50,12 +50,14 @@ const Game = () => {
       if (!response.ok) throw new Error('Network response was not ok');
       const data = await response.json();
       setCurrentLocation(data);
-      
-      setUserPosition(null);
-      setGuesses([]);
-      setFeedback('');
-      setDistance(null);
-      setRevealAnswer(false);
+      // if no saved state yet, initialize fresh
+      if(!localStorage.getItem(storageKey)){
+        setUserPosition(null);
+        setGuesses([]);
+        setFeedback('');
+        setDistance(null);
+        setRevealAnswer(false);
+      }
       // reset map view
       if (mapRef.current) {
         mapRef.current.setView([42.3601, -71.0589], 13);
@@ -73,7 +75,15 @@ const Game = () => {
       try{
         const saved = JSON.parse(raw);
         if(saved){
-          setGuesses(saved.guesses||[]);
+          if(saved.guesses){
+          setGuesses(saved.guesses.map(g=>({
+            ...g,
+            latlng: L.latLng(g.latlng.lat, g.latlng.lng)
+          })));
+          if(saved.guesses.length){
+            setUserPosition(L.latLng(saved.guesses[saved.guesses.length-1].latlng.lat, saved.guesses[saved.guesses.length-1].latlng.lng));
+          }
+        }
           setDistance(saved.distance||null);
           setFeedback(saved.feedback||'');
           setRevealAnswer(saved.revealAnswer||false);
@@ -84,7 +94,11 @@ const Game = () => {
 
   // save whenever relevant state changes
   useEffect(()=>{
-    const payload = {guesses,distance,feedback,revealAnswer};
+    const serializableGuesses = guesses.map(g=>({
+      ...g,
+      latlng:{lat:g.latlng.lat,lng:g.latlng.lng}
+    }));
+    const payload = {guesses:serializableGuesses,distance,feedback,revealAnswer};
     localStorage.setItem(storageKey, JSON.stringify(payload));
   },[guesses,distance,feedback,revealAnswer,storageKey]);
 
