@@ -103,6 +103,7 @@ const Game = () => {
   },[guesses,distance,feedback,revealAnswer,storageKey]);
 
   /* ----- effects ----- */
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(()=>{
     // initial fetch
     fetchDailyLocation();
