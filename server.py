@@ -31,12 +31,14 @@ def random_boston_coordinate():
     lng = random.uniform(BOSTON_BOUNDS["min_lng"], BOSTON_BOUNDS["max_lng"])
     return lat, lng
 
-def get_street_view_image_url(lat: float, lng: float, width: int = 600, height: int = 400) -> str:
+def get_street_view_image_url(lat: float, lng: float, width: int = 600, height: int = 400, radius: int = 0) -> str:
     """Generate a Google Street View Static API URL for the given coordinate.
     Falls back to no key if GOOGLE_MAPS_API_KEY is absent."""
     api_key = os.getenv("GOOGLE_MAPS_API_KEY", "")
     base_url = "https://maps.googleapis.com/maps/api/streetview"
-    params = f"size={width}x{height}&location={lat},{lng}"
+    params = f"size={width}x{height}&location={lat},{lng}&pitch=0&fov=90"
+    if radius:
+        params += f"&radius={radius}"
     if api_key:
         params += f"&key={api_key}"
     return f"{base_url}?{params}"
@@ -75,7 +77,7 @@ def get_location():
     # deterministic seed per day to avoid repeat due to server running long
     random.seed(int(hashlib.sha256(today.encode()).hexdigest(),16) & 0xffffffff)
     lat, lng = random_boston_coordinate()
-    image_url = get_street_view_image_url(lat, lng, width=640, height=400)
+    image_url = get_street_view_image_url(lat, lng, width=640, height=400, radius=300)
     payload = {
         'image': image_url,
         'name': 'Street View',

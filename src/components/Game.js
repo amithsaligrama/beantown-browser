@@ -25,7 +25,7 @@ const Game = () => {
   const [distance, setDistance] = useState(null);
   
   const [feedback, setFeedback] = useState(''); // textual hint
-  const [imageExpanded, setImageExpanded] = useState(false);
+  const [imageExpanded, setImageExpanded] = useState(true);
   const [countdown, setCountdown] = useState('');
   const [revealAnswer, setRevealAnswer] = useState(false);
   const [shareCopied, setShareCopied] = useState(false);
