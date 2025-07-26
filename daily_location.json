@@ -1,1 +1,1 @@
-{"date": "2025-07-17", "payload": {"image": "https://maps.googleapis.com/maps/api/streetview?size=640x400&location=42.33886948537806,-71.03170659114029&key=AIzaSyAiWVMmE3AU5nrwaf2kuwX8Xjats9PNL_c", "name": "Street View", "lat": 42.33886948537806, "lng": -71.03170659114029}}
+{"date": "2025-07-26", "payload": {"image": "https://maps.googleapis.com/maps/api/streetview?size=640x400&location=42.37947186602636,-71.01578665935695&pitch=0&fov=90&radius=300&key=AIzaSyAiWVMmE3AU5nrwaf2kuwX8Xjats9PNL_c", "name": "Street View", "lat": 42.37947186602636, "lng": -71.01578665935695}}

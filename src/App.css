@@ -2,13 +2,20 @@
 
 html, body, #root {
   height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  width: 100%;
 }
 
 body {
   margin: 0;
+  padding: 0;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   background: #0d1117; /* dark background */
   color: #e6edf3;
+  overflow: hidden;
+  width: 100%;
 }
 
 .thumbnail-img {
@@ -60,46 +67,115 @@ body {
 }
 
 .game-container {
-  width: 100%;
-  max-width: 1024px;
-  margin: 0 auto;
-  padding: 24px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  overflow: hidden;
+}
+
+.map-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 }
 
 .game-header {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
   gap: 12px;
-  margin-bottom: 24px;
   text-align: center;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  margin-bottom: 30px;
   text-align: center;
+  background: rgba(22, 27, 34, 0.9);
+  padding: 12px 20px;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
 }
 
-.game-header button {
-  cursor: pointer;
-  transition: transform 0.15s ease-in-out, opacity 0.2s;
-  padding: 10px 20px;
+.game-header h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.countdown {
+  font-size: 14px;
+  color: #8b949e;
+}
+
+.hint-overlay {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(22, 27, 34, 0.95);
+  color: #e6edf3;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.result-overlay {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(22, 27, 34, 0.95);
+  color: #e6edf3;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  max-width: 400px;
+  width: 90%;
+}
+
+.result-overlay h3 {
+  margin: 0 0 8px 0;
+  color: #e6edf3;
+  font-size: 18px;
+}
+
+.result-overlay p {
+  margin: 8px 0 16px 0;
+  color: #e6edf3;
   font-size: 16px;
+}
+
+.result-overlay button {
   background-color: #007bff;
   color: white;
   border: none;
   border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
   cursor: pointer;
-  margin-top: 10px;
+  transition: background-color 0.2s;
 }
 
-.game-header button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  background-color: #ccc;
-  cursor: not-allowed;
+.result-overlay button:hover {
+  background-color: #0056b3;
 }
 
 .location-info {
@@ -112,6 +188,42 @@ body {
   position: relative;
   text-align: center;
   margin-bottom: 20px;
+}
+
+.distance-info {
+  text-align: center;
+  margin-bottom: 16px;
+  background: #161b22;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  width: 100%;
+  max-width: 400px;
+}
+
+.distance-info h3 {
+  margin: 0 0 8px 0;
+  color: #e6edf3;
+}
+
+.distance-info p {
+  margin: 8px 0;
+  color: #e6edf3;
+}
+
+.distance-info button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.distance-info button:hover {
+  background-color: #0056b3;
 }
 
 .location-info img {

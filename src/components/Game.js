@@ -249,81 +249,82 @@ const Game = () => {
         <div className="countdown">Next puzzle in {countdown}</div>
       </div>
 
-      {feedback && !revealAnswer && (
-        <div className="hint-overlay">{feedback}</div>
-      )}
-
-      <MapContainer 
-        whenCreated={(map)=>{mapRef.current = map;}}
-        center={[42.3601, -71.0589]} 
-        zoom={13}
-        style={{ height: '100vh', width: '100vw' }}
-      >
-        <ClickHandler />
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
-        
-        {revealAnswer && currentLocation && (
-          <Marker position={[currentLocation.lat, currentLocation.lng]}>
-            <Popup>
-              {currentLocation.name}
-            </Popup>
-          </Marker>
-        )}
-
-        {guesses.map((g, idx) => (
-          <Marker key={idx} position={g.latlng} icon={getIcon(getColor(g.distance))}>
-            <Popup>
-              {`Guess #${idx + 1}`}
-              {revealAnswer && g.distance !== undefined && (
-                <p>Distance: {formatDistance(g.distance)}</p>
-              )}
-            </Popup>
-          </Marker>
-        ))}
-
-
-        {/* dashed line after game ends */}
-        {revealAnswer && userPosition && (
-          <Polyline
-            positions={[userPosition, [currentLocation.lat, currentLocation.lng]]}
-            pathOptions={{ color: 'red', dashArray: '6' }}
+      <div className="map-container">
+        <MapContainer 
+          whenCreated={(map)=>{mapRef.current = map;}}
+          center={[42.3601, -71.0589]} 
+          zoom={13}
+          style={{ height: '100vh', width: '100vw' }}
+        >
+          <ClickHandler />
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           />
-        )}
-      </MapContainer>
+          
+          {revealAnswer && currentLocation && (
+            <Marker position={[currentLocation.lat, currentLocation.lng]}>
+              <Popup>
+                {currentLocation.name}
+              </Popup>
+            </Marker>
+          )}
 
-      {currentLocation && (
-        <>
-          {!imageExpanded && (
-            <img
-              src={currentLocation.image}
-              alt="location thumbnail"
-              className="thumbnail-img"
-              onClick={() => setImageExpanded(true)}
+          {guesses.map((g, idx) => (
+            <Marker key={idx} position={g.latlng} icon={getIcon(getColor(g.distance))}>
+              <Popup>
+                {`Guess #${idx + 1}`}
+                {revealAnswer && g.distance !== undefined && (
+                  <p>Distance: {formatDistance(g.distance)}</p>
+                )}
+              </Popup>
+            </Marker>
+          ))}
+
+          {/* dashed line after game ends */}
+          {revealAnswer && userPosition && (
+            <Polyline
+              positions={[userPosition, [currentLocation.lat, currentLocation.lng]]}
+              pathOptions={{ color: 'red', dashArray: '6' }}
             />
           )}
-          {imageExpanded && (
-            <div className="img-overlay" onClick={() => setImageExpanded(false)}>
+        </MapContainer>
+
+        {feedback && !revealAnswer && (
+          <div className="hint-overlay">{feedback}</div>
+        )}
+
+        {revealAnswer && (
+          <div className="result-overlay">
+            <h3>{feedback}</h3>
+            {distance !== null && <p>You were {formatDistance(distance)} away</p>}
+            <button onClick={handleShare}>Share</button>
+            {shareCopied && <span style={{marginLeft:'8px'}}>Copied!</span>}
+          </div>
+        )}
+
+        {currentLocation && (
+          <>
+            {!imageExpanded && (
               <img
                 src={currentLocation.image}
-                alt="location"
-                onClick={(e) => e.stopPropagation()}
+                alt="location thumbnail"
+                className="thumbnail-img"
+                onClick={() => setImageExpanded(true)}
               />
-            </div>
-          )}
-        </>
-      )}
-
-      {revealAnswer && (
-        <div className="distance-info" style={{ marginTop: '15px' }}>
-          <h3>{feedback}</h3>
-          {distance !== null && <p>You were {formatDistance(distance)} away</p>}
-          <button onClick={handleShare} style={{marginTop:'10px'}}>Share</button>
-          {shareCopied && <span style={{marginLeft:'8px'}}>Copied!</span>}
-        </div>
-      )}
+            )}
+            {imageExpanded && (
+              <div className="img-overlay" onClick={() => setImageExpanded(false)}>
+                <img
+                  src={currentLocation.image}
+                  alt="location"
+                  onClick={(e) => e.stopPropagation()}
+                />
+              </div>
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 };

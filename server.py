@@ -31,7 +31,7 @@ def random_boston_coordinate():
     lng = random.uniform(BOSTON_BOUNDS["min_lng"], BOSTON_BOUNDS["max_lng"])
     return lat, lng
 
-def get_street_view_image_url(lat: float, lng: float, width: int = 600, height: int = 400, radius: int = 0) -> str:
+def get_street_view_image_url(lat: float, lng: float, width: int = 600, height: int = 400, radius: int = 300) -> str:
     """Generate a Google Street View Static API URL for the given coordinate.
     Falls back to no key if GOOGLE_MAPS_API_KEY is absent."""
     api_key = os.getenv("GOOGLE_MAPS_API_KEY", "")
