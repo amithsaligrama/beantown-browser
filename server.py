@@ -33,8 +33,8 @@ def random_boston_coordinate():
 
 def get_street_view_image_url(lat: float, lng: float, width: int = 600, height: int = 400, radius: int = 300) -> str:
     """Generate a Google Street View Static API URL for the given coordinate.
-    Falls back to no key if GOOGLE_MAPS_API_KEY is absent."""
-    api_key = os.getenv("GOOGLE_MAPS_API_KEY", "")
+    Falls back to no key if REACT_APP_GOOGLE_MAPS_API_KEY is absent."""
+    api_key = os.getenv("REACT_APP_GOOGLE_MAPS_API_KEY", "")
     base_url = "https://maps.googleapis.com/maps/api/streetview"
     params = f"size={width}x{height}&location={lat},{lng}&pitch=0&fov=90"
     if radius:
